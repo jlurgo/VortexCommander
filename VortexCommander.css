@@ -1,0 +1,11 @@
+#plantillas{
+    display:none;    
+}
+
+html, 
+body, 
+#panel_principal, 
+.app_vortex_commander,
+.app_vortex_commander #div_mapa{
+    height:100%;
+}
