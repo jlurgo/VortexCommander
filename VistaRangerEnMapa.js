@@ -1,9 +1,9 @@
-var Soldado = function(opt){
+var VistaRangerEnMapa = function(opt){
     this.o = opt;
     this.start();
 };
 
-Soldado.prototype.start = function(){
+VistaRangerEnMapa.prototype.start = function(){
     var _this = this;
     this.portal = new NodoPortalBidi();
     NodoRouter.instancia.conectarBidireccionalmenteCon(this.portal);
@@ -38,9 +38,9 @@ Soldado.prototype.start = function(){
                                 this.posicionRecibida.bind(this));
 };
 
-Soldado.prototype.posicionRecibida = function(posicion){
+VistaRangerEnMapa.prototype.posicionRecibida = function(posicion){
     var lat_long_posicion = new google.maps.LatLng(posicion.latitud,posicion.longitud);
-    this.o.mapa.panTo(lat_long_posicion);
+    //this.o.mapa.panTo(lat_long_posicion);
     this.marcador_posicion.setPosition(lat_long_posicion);    
     this.derrotero.push(lat_long_posicion);
     this.linea_derrotero.setPath(this.derrotero);

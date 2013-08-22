@@ -16,7 +16,7 @@ AppVortexCommander.prototype.start = function(){
     this.portal = new NodoPortalBidi();
     NodoRouter.instancia.conectarBidireccionalmenteCon(this.portal);
     
-    this.soldados = {};
+    this.rangers = {};
     
     this.portal.pedirMensajes(  new FiltroXClaveValor("tipoDeMensaje", "vortex.commander.posicion"),
                                 this.posicionRecibida.bind(this));
@@ -24,8 +24,8 @@ AppVortexCommander.prototype.start = function(){
 
 AppVortexCommander.prototype.posicionRecibida = function(posicion){
     var lat_long_posicion = new google.maps.LatLng(posicion.latitud,posicion.longitud);
-    if(this.soldados[posicion.usuario] !== undefined) return;
-    this.soldados[posicion.usuario] = new Soldado({
+    if(this.rangers[posicion.usuario] !== undefined) return;
+    this.rangers[posicion.usuario] = new VistaRangerEnMapa({
         mapa: this.mapa,
         nombre: posicion.usuario,
         posicionInicial: lat_long_posicion

@@ -3,23 +3,18 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         
-        <title>Vortex Commander</title>
+        <title>Administrador de bots</title>
 		<link rel="stylesheet" href="VortexCommander.css" type="text/css">
-<!--        <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">-->
+        <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
 	</head>
 	
 	<body>		
         <div id="panel_principal">
+            <input type="button" id="btn_crear_bot" value="Crear Bot Ranger"/>
         </div>	
         
         <div id="plantillas">
-            <div id="plantilla_app_vortex_commander" class="app_vortex_commander">
-                <div id="div_mapa">
-                </div>
-            </div>  
-            <div id="plantilla_label_soldado" class="label_soldado">
-            </div>
         </div>  
     </body>
     
@@ -45,10 +40,8 @@
     <script type="text/javascript" src="http://jlurgo.github.io/VortexJS/socket.io.js"></script>
     <script type="text/javascript" src="http://jlurgo.github.io/VortexJS/NodoConectorSocket.js"></script>
     
-    <!--Vortex Commander-->
-    <script type="text/javascript" src="VortexCommander.js"></script> 
-    <script type="text/javascript" src="AppVortexCommander.js"></script> 
-    <script type="text/javascript" src="VistaRangerEnMapa.js"></script> 
-
+    <!--Administrador de bots-->
+    <script type="text/javascript" src="AdministradorDeBots.js"></script> 
+    <script type="text/javascript" src="RangerBot.js"></script> 
 </html>
 
