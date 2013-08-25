@@ -33,6 +33,10 @@ VistaRangerEnMapa.prototype.start = function(){
     });
     this.label_nombre.open(this.o.mapa,this.marcador_posicion);
     
+    setTimeout(function(){
+        _this.label_nombre.close();
+    },1000);
+    
     this.portal.pedirMensajes(  new FiltroAND([new FiltroXClaveValor("tipoDeMensaje", "vortex.commander.posicion"),
                                                new FiltroXClaveValor("usuario", this.o.nombre)]),
                                 this.posicionRecibida.bind(this));

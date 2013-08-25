@@ -2,7 +2,7 @@ var AdministradorDeBots = function(){
     this.start();
 };
 AdministradorDeBots.prototype.start = function(){
-    var clienteHTTP = new NodoClienteHTTP('http://router-vortex.herokuapp.com', 1000);             
+    var clienteHTTP = new NodoClienteHTTP('http://router-vortex.herokuapp.com', 100);             
     NodoRouter.instancia.conectarBidireccionalmenteCon(clienteHTTP);
     
     this.btn_crear_bots = $("#btn_crear_bot");

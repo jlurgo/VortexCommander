@@ -9,13 +9,14 @@ RangerBot.prototype.start = function(){
     this.posicion = new google.maps.LatLng(-34.603683 + (Math.random()*0.01)-0.005,
                                            -58.381569 + (Math.random()*0.01)-0.005);
     
-    this.vectorDirector = {
-        x:(Math.random()*0.001)-0.0005,
-        y:(Math.random()*0.001)-0.0005
-    }
+    this.heading = Math.random()*2*Math.PI;
+    this.heading_target = Math.random()*2*Math.PI;
+    
+    this.velocidad = 0.001;
+    
     this.nombre = "BOT_" + Math.floor((Math.random()*100)+1).toString();
     setInterval(function(){_this.enviarPosicion();}
-               , 1000);
+               , 100);
     
 };
 
@@ -30,9 +31,10 @@ RangerBot.prototype.enviarPosicion = function(){
 };
 
 RangerBot.prototype.calcularPosicion = function(){
-    this.vectorDirector.x += (Math.random()*0.001)-0.0005;
-    this.vectorDirector.y += (Math.random()*0.001)-0.0005;
-    this.posicion = new google.maps.LatLng(this.posicion.lat() + this.vectorDirector.x,
-                                           this.posicion.lng() + this.vectorDirector.y);
+    this.heading += (this.heading_target-this.heading)/5;   
+    if(Math.abs(this.heading_target-this.heading)<0.1) this.heading_target = Math.random()*2*Math.PI;
+    
+    this.posicion = new google.maps.LatLng(this.posicion.lat() + Math.cos(this.heading) * this.velocidad ,
+                                           this.posicion.lng() + Math.sin(this.heading) * this.velocidad) ;
     
 };
