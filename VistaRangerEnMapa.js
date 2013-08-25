@@ -12,7 +12,7 @@ VistaRangerEnMapa.prototype.start = function(){
         map: this.o.mapa,
         title:this.o.nombre,
         position: this.o.posicionInicial,
-        animation: google.maps.Animation.DROP,
+        animation: google.maps.Animation.DROP
     });
     
     this.derrotero = [];
@@ -28,8 +28,8 @@ VistaRangerEnMapa.prototype.start = function(){
         content: $("#plantilla_label_soldado").clone().text(this.o.nombre)[0]
     });
     
-    google.maps.event.addListener(this.marcador_posicion, 'click', function() {
-        _this.label_nombre.open(_this.o.mapa,_this.marcador_posicion);
+    google.maps.event.addListener(this.marcador_posicion, 'click', function(event) {
+        _this.o.onClick(_this, event);
     });
     this.label_nombre.open(this.o.mapa,this.marcador_posicion);
     
@@ -38,15 +38,76 @@ VistaRangerEnMapa.prototype.start = function(){
     },1000);
     
     this.portal.pedirMensajes(  new FiltroAND([new FiltroXClaveValor("tipoDeMensaje", "vortex.commander.posicion"),
-                                               new FiltroXClaveValor("usuario", this.o.nombre)]),
+                                               new FiltroXClaveValor("ranger", this.o.nombre)]),
                                 this.posicionRecibida.bind(this));
+    
+    this.portal.pedirMensajes(  new FiltroAND([new FiltroXClaveValor("tipoDeMensaje", "vortex.commander.confirmaciondearribo"),
+                                               new FiltroXClaveValor("ranger", this.o.nombre)]),
+                                this.confirmacionDeArriboRecibida.bind(this));
+    
+    this.ajustarFlechaDestino = this.ajustarFlechaDestinoCuandoNoHayDestino;
 };
 
 VistaRangerEnMapa.prototype.posicionRecibida = function(posicion){
-    var lat_long_posicion = new google.maps.LatLng(posicion.latitud,posicion.longitud);
-    //this.o.mapa.panTo(lat_long_posicion);
-    this.marcador_posicion.setPosition(lat_long_posicion);    
-    this.derrotero.push(lat_long_posicion);
+    this.posicionActual = new google.maps.LatLng(posicion.latitud,posicion.longitud);
+    this.marcador_posicion.setPosition(this.posicionActual);    
+    this.derrotero.push(this.posicionActual);
     this.linea_derrotero.setPath(this.derrotero);
+    this.ajustarFlechaDestino();
 };
 
+VistaRangerEnMapa.prototype.confirmacionDeArriboRecibida = function(confirmacion){
+    this.borrarFlechaDestino();
+};
+
+VistaRangerEnMapa.prototype.borrarFlechaDestino = function(){
+    if(this.flechaDestino === undefined) return;
+    this.flechaDestino.setVisible(false);
+    this.flechaDestino = undefined;
+};
+
+VistaRangerEnMapa.prototype.goTo = function(destino){
+    this.destino = destino;
+    this.portal.enviarMensaje({ tipoDeMensaje: "vortex.commander.goto",
+                                ranger: this.o.nombre,
+                                latitudDestino: destino.lat(),
+                                longitudDestino: destino.lng() 
+                              });
+    this.borrarFlechaDestino();
+    this.flechaDestino = new google.maps.Polyline({
+        path: [
+            this.posicionActual,
+            this.destino
+        ],
+        strokeColor: "orange",
+        strokeOpacity:0.5,
+        strokeWeight:2,
+        icons: [{
+          icon: {
+                path: google.maps.SymbolPath.FORWARD_OPEN_ARROW
+            },
+          offset: '100%'
+        }],
+        map: this.o.mapa
+    });
+    this.ajustarFlechaDestino = this.ajustarFlechaDestinoCuandoHayDestino;
+};
+
+VistaRangerEnMapa.prototype.ajustarFlechaDestinoCuandoHayDestino = function(){
+    this.flechaDestino.setPath([
+            this.posicionActual,
+            this.destino
+        ]);
+};
+
+VistaRangerEnMapa.prototype.ajustarFlechaDestinoCuandoNoHayDestino = function(){
+    
+};
+
+VistaRangerEnMapa.prototype.seleccionar = function(){
+    this.marcador_posicion.setAnimation(google.maps.Animation.BOUNCE);
+};
+
+VistaRangerEnMapa.prototype.desSeleccionar = function(){
+    this.marcador_posicion.setAnimation(null);
+};

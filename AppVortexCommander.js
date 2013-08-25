@@ -20,16 +20,37 @@ AppVortexCommander.prototype.start = function(){
     
     this.portal.pedirMensajes(  new FiltroXClaveValor("tipoDeMensaje", "vortex.commander.posicion"),
                                 this.posicionRecibida.bind(this));
+    var _this = this;
+    google.maps.event.addListener(this.mapa, 'click', function(event) {
+        _this.rangerSeleccionado.goTo(event.latLng);
+    });
+    
+    this.rangerSeleccionado = {
+        goTo: function(){}  
+    };
 };
 
 AppVortexCommander.prototype.posicionRecibida = function(posicion){
+    var _this = this;
     var lat_long_posicion = new google.maps.LatLng(posicion.latitud,posicion.longitud);
-    if(this.rangers[posicion.usuario] !== undefined) return;
-    this.rangers[posicion.usuario] = new VistaRangerEnMapa({
+    if(this.rangers[posicion.ranger] !== undefined) return;
+    this.rangers[posicion.ranger] = new VistaRangerEnMapa({
         mapa: this.mapa,
-        nombre: posicion.usuario,
-        posicionInicial: lat_long_posicion
+        nombre: posicion.ranger,
+        posicionInicial: lat_long_posicion,
+        onClick: function(ranger, e){
+            _this.seleccionarRanger(ranger);             
+        }
     });
+};
+
+AppVortexCommander.prototype.seleccionarRanger = function(ranger){
+    this.rangerSeleccionado = ranger;
+    for(var key_ranger in this.rangers){
+        this.rangers[key_ranger].desSeleccionar();
+    }
+    ranger.seleccionar();  
+    this.mapa.setOptions({draggableCursor:'crosshair'});
 };
 
 AppVortexCommander.prototype.dibujarEn = function(panel){
