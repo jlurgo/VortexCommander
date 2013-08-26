@@ -45,6 +45,10 @@ VistaRangerEnMapa.prototype.start = function(){
                                                new FiltroXClaveValor("ranger", this.o.nombre)]),
                                 this.confirmacionDeArriboRecibida.bind(this));
     
+    this.portal.pedirMensajes(  new FiltroAND([new FiltroXClaveValor("tipoDeMensaje", "vortex.commander.goingTo"),
+                                               new FiltroXClaveValor("ranger", this.o.nombre)]),
+                                this.eventoGoingToRecibido.bind(this));
+    
     this.ajustarFlechaDestino = this.ajustarFlechaDestinoCuandoNoHayDestino;
 };
 
@@ -60,19 +64,8 @@ VistaRangerEnMapa.prototype.confirmacionDeArriboRecibida = function(confirmacion
     this.borrarFlechaDestino();
 };
 
-VistaRangerEnMapa.prototype.borrarFlechaDestino = function(){
-    if(this.flechaDestino === undefined) return;
-    this.flechaDestino.setVisible(false);
-    this.flechaDestino = undefined;
-};
-
-VistaRangerEnMapa.prototype.goTo = function(destino){
-    this.destino = destino;
-    this.portal.enviarMensaje({ tipoDeMensaje: "vortex.commander.goto",
-                                ranger: this.o.nombre,
-                                latitudDestino: destino.lat(),
-                                longitudDestino: destino.lng() 
-                              });
+VistaRangerEnMapa.prototype.eventoGoingToRecibido = function(goingTo){
+    this.destino = new google.maps.LatLng(goingTo.latitud,goingTo.longitud);
     this.borrarFlechaDestino();
     this.flechaDestino = new google.maps.Polyline({
         path: [
@@ -91,6 +84,20 @@ VistaRangerEnMapa.prototype.goTo = function(destino){
         map: this.o.mapa
     });
     this.ajustarFlechaDestino = this.ajustarFlechaDestinoCuandoHayDestino;
+};
+
+VistaRangerEnMapa.prototype.borrarFlechaDestino = function(){
+    if(this.flechaDestino === undefined) return;
+    this.flechaDestino.setVisible(false);
+    this.flechaDestino = undefined;
+};
+
+VistaRangerEnMapa.prototype.goTo = function(destino){
+    this.portal.enviarMensaje({ tipoDeMensaje: "vortex.commander.goto",
+                                ranger: this.o.nombre,
+                                latitudDestino: destino.lat(),
+                                longitudDestino: destino.lng() 
+                              });
 };
 
 VistaRangerEnMapa.prototype.ajustarFlechaDestinoCuandoHayDestino = function(){

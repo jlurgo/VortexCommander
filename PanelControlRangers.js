@@ -1,9 +1,9 @@
-var AppVortexCommander = function(opt){
+var PanelControlRangers = function(opt){
     this.o = opt;
     this.start();
 };
 
-AppVortexCommander.prototype.start = function(){
+PanelControlRangers.prototype.start = function(){
     this.ui = $('#plantilla_app_vortex_commander').clone();
     var pos_obelisco = new google.maps.LatLng(-34.603683,-58.381569);
     var mapOptions = {
@@ -30,7 +30,7 @@ AppVortexCommander.prototype.start = function(){
     };
 };
 
-AppVortexCommander.prototype.posicionRecibida = function(posicion){
+PanelControlRangers.prototype.posicionRecibida = function(posicion){
     var _this = this;
     var lat_long_posicion = new google.maps.LatLng(posicion.latitud,posicion.longitud);
     if(this.rangers[posicion.ranger] !== undefined) return;
@@ -44,7 +44,7 @@ AppVortexCommander.prototype.posicionRecibida = function(posicion){
     });
 };
 
-AppVortexCommander.prototype.seleccionarRanger = function(ranger){
+PanelControlRangers.prototype.seleccionarRanger = function(ranger){
     this.rangerSeleccionado = ranger;
     for(var key_ranger in this.rangers){
         this.rangers[key_ranger].desSeleccionar();
@@ -53,6 +53,6 @@ AppVortexCommander.prototype.seleccionarRanger = function(ranger){
     this.mapa.setOptions({draggableCursor:'crosshair'});
 };
 
-AppVortexCommander.prototype.dibujarEn = function(panel){
+PanelControlRangers.prototype.dibujarEn = function(panel){
     panel.append(this.ui);
 };
