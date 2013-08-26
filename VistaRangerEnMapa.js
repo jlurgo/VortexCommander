@@ -28,9 +28,16 @@ VistaRangerEnMapa.prototype.start = function(){
         content: $("#plantilla_label_ranger").clone().text(this.o.nombre)[0]
     });
     
-    google.maps.event.addListener(this.marcador_posicion, 'click', function(event) {
-        _this.o.onClick(_this, event);
+    var mouse_down = false;
+    google.maps.event.addListener(this.marcador_posicion, 'mousedown', function(event) {
+        mouse_down = true;
     });
+    
+    google.maps.event.addListener(this.marcador_posicion, 'mouseup', function(event) {
+        if(mouse_down) _this.o.onClick(_this, event);  
+         mouse_down = false;
+    });
+    
     this.label_nombre.open(this.o.mapa,this.marcador_posicion);
     
     setTimeout(function(){
@@ -39,15 +46,15 @@ VistaRangerEnMapa.prototype.start = function(){
     
     this.portal.pedirMensajes(  new FiltroAND([new FiltroXClaveValor("tipoDeMensaje", "vortex.commander.posicion"),
                                                new FiltroXClaveValor("ranger", this.o.nombre)]),
-                                this.posicionRecibida.bind(this));
+                                function(mensaje){_this.posicionRecibida(mensaje);});
     
     this.portal.pedirMensajes(  new FiltroAND([new FiltroXClaveValor("tipoDeMensaje", "vortex.commander.confirmaciondearribo"),
                                                new FiltroXClaveValor("ranger", this.o.nombre)]),
-                                this.confirmacionDeArriboRecibida.bind(this));
+                                function(mensaje){_this.confirmacionDeArriboRecibida(mensaje);});
     
     this.portal.pedirMensajes(  new FiltroAND([new FiltroXClaveValor("tipoDeMensaje", "vortex.commander.goingTo"),
                                                new FiltroXClaveValor("ranger", this.o.nombre)]),
-                                this.eventoGoingToRecibido.bind(this));
+                                function(mensaje){_this.eventoGoingToRecibido(mensaje);});
     
     this.ajustarFlechaDestino = this.ajustarFlechaDestinoCuandoNoHayDestino;
 };
