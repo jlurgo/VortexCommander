@@ -4,7 +4,7 @@ var PanelControlRangers = function(opt){
 };
 
 PanelControlRangers.prototype.start = function(){
-    this.ui = $('#plantilla_app_vortex_commander').clone();
+    this.ui = $('#plantilla_panel_control_rangers').clone();
     var pos_obelisco = new google.maps.LatLng(-34.603683,-58.381569);
     var mapOptions = {
         zoom: 18,
@@ -12,6 +12,10 @@ PanelControlRangers.prototype.start = function(){
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     this.mapa = new google.maps.Map(this.ui.find("#div_mapa")[0], mapOptions);
+             
+    this.ui.find("#div_mapa").show(function(){
+        google.maps.event.trigger(_this.mapa, "resize");        
+    });
     
     this.portal = new NodoPortalBidi();
     NodoRouter.instancia.conectarBidireccionalmenteCon(this.portal);
@@ -55,4 +59,5 @@ PanelControlRangers.prototype.seleccionarRanger = function(ranger){
 
 PanelControlRangers.prototype.dibujarEn = function(panel){
     panel.append(this.ui);
+    var _this = this;
 };

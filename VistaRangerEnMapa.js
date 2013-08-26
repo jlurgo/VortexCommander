@@ -25,7 +25,7 @@ VistaRangerEnMapa.prototype.start = function(){
     });
     
     this.label_nombre = new google.maps.InfoWindow({
-        content: $("#plantilla_label_soldado").clone().text(this.o.nombre)[0]
+        content: $("#plantilla_label_ranger").clone().text(this.o.nombre)[0]
     });
     
     google.maps.event.addListener(this.marcador_posicion, 'click', function(event) {
