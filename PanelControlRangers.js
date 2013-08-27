@@ -46,6 +46,16 @@ PanelControlRangers.prototype.start = function(){
         }
     });
     
+    this.btn_dejar_rastro = new BotonRedondoFlotante({ 
+        ui: this.botonera_ranger.find("#btn_dejar_rastro"),
+        alPrender: function(){
+            _this.rangerSeleccionado.dejarRastro();
+        },          
+        alApagar: function(){
+            _this.rangerSeleccionado.yaNoDejarRastro();
+        }
+    });
+        
     this.portal = new NodoPortalBidi();
     NodoRouter.instancia.conectarBidireccionalmenteCon(this.portal);
     
