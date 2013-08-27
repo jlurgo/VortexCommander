@@ -57,10 +57,12 @@ VistaRangerEnMapa.prototype.start = function(){
                                 function(mensaje){_this.eventoGoingToRecibido(mensaje);});
     
     this.ajustarFlechaDestino = this.ajustarFlechaDestinoCuandoNoHayDestino;
+    this.panear_al_recibir_posicion = false;
 };
 
 VistaRangerEnMapa.prototype.posicionRecibida = function(posicion){
     this.posicionActual = new google.maps.LatLng(posicion.latitud,posicion.longitud);
+    if(this.panear_al_recibir_posicion) this.o.mapa.panTo(this.posicionActual);
     this.marcador_posicion.setPosition(this.posicionActual);    
     this.derrotero.push(this.posicionActual);
     this.linea_derrotero.setPath(this.derrotero);
@@ -124,4 +126,18 @@ VistaRangerEnMapa.prototype.seleccionar = function(){
 
 VistaRangerEnMapa.prototype.desSeleccionar = function(){
     this.marcador_posicion.setAnimation(null);
+};
+
+VistaRangerEnMapa.prototype.seguirConPaneo = function(){
+    this.panear_al_recibir_posicion = true;
+};
+
+VistaRangerEnMapa.prototype.yaNoSeguirConPaneo = function(){
+    this.panear_al_recibir_posicion = false;
+};
+
+
+var vista_ranger_null = {
+    goTo: function(){},
+    seguirConPaneo: function(){}
 };

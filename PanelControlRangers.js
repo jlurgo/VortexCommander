@@ -4,6 +4,7 @@ var PanelControlRangers = function(opt){
 };
 
 PanelControlRangers.prototype.start = function(){
+    var _this = this;
     this.ui = $('#plantilla_panel_control_rangers').clone();
     var pos_obelisco = new google.maps.LatLng(-34.603683,-58.381569);
     var mapOptions = {
@@ -17,12 +18,21 @@ PanelControlRangers.prototype.start = function(){
         google.maps.event.trigger(_this.mapa, "resize");        
     });
     
+    this.botonera_ranger = this.ui.find("#botonera_ranger");
+    this.btn_seguir_ranger = this.botonera_ranger.find("#btn_seguir_ranger");
+    
+    this.btn_seguir_ranger.click(function(){
+        for(var key_ranger in _this.rangers){
+            _this.rangers[key_ranger].yaNoSeguirConPaneo();
+        }
+       _this.rangerSeleccionado.seguirConPaneo(); 
+    });
+    
     this.portal = new NodoPortalBidi();
     NodoRouter.instancia.conectarBidireccionalmenteCon(this.portal);
     
     this.rangers = {};
     
-    var _this = this;
     this.portal.pedirMensajes(  new FiltroXClaveValor("tipoDeMensaje", "vortex.commander.posicion"),
                                 function(mensaje){_this.posicionRecibida(mensaje);});
     var _this = this;
@@ -37,9 +47,7 @@ PanelControlRangers.prototype.start = function(){
          mouse_down = false;
     });
     
-    this.rangerSeleccionado = {
-        goTo: function(){}  
-    };
+    this.rangerSeleccionado = vista_ranger_null;
 };
 
 PanelControlRangers.prototype.posicionRecibida = function(posicion){
@@ -52,9 +60,7 @@ PanelControlRangers.prototype.posicionRecibida = function(posicion){
         posicionInicial: lat_long_posicion,
         onClick: function(ranger, e){
             _this.seleccionarRanger(ranger); 
-            setTimeout(function(){
-                _this.desSeleccionarRangers();
-            }, 3000);            
+            _this.mostrarBotoneraRanger();         
         }
     });
 };
@@ -64,9 +70,8 @@ PanelControlRangers.prototype.desSeleccionarRangers = function(){
         this.rangers[key_ranger].desSeleccionar();
     }
     this.mapa.setOptions({draggableCursor:null});
-    this.rangerSeleccionado = {
-        goTo: function(){}  
-    };
+    this.rangerSeleccionado = vista_ranger_null;
+    this.ocultarBotoneraRanger();         
 };
 
 PanelControlRangers.prototype.seleccionarRanger = function(ranger){
@@ -74,6 +79,14 @@ PanelControlRangers.prototype.seleccionarRanger = function(ranger){
     ranger.seleccionar();  
     this.rangerSeleccionado = ranger;
     this.mapa.setOptions({draggableCursor:'crosshair'});
+};
+
+PanelControlRangers.prototype.mostrarBotoneraRanger = function(){
+    this.botonera_ranger.show();
+};
+
+PanelControlRangers.prototype.ocultarBotoneraRanger = function(){
+    this.botonera_ranger.hide();
 };
 
 PanelControlRangers.prototype.dibujarEn = function(panel){

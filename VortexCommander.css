@@ -10,6 +10,30 @@ body,
     height:100%;
 }
 
+.panel_control_rangers{
+    position:relative;
+}
+
+.panel_control_rangers #botonera_ranger{
+    position:absolute;
+    bottom:5px;
+    left:5px;
+}
+
+.panel_control_rangers #botonera_ranger .boton_en_mapa{
+    display:inline-block;
+    border-radius:35px;
+}
+
+.panel_control_rangers #botonera_ranger .boton_en_mapa .imagen_boton{
+    height:70px;
+}
+
+.panel_control_rangers #botonera_ranger .boton_en_mapa:hover{
+    -webkit-box-shadow: 0 0 16px rgba(66, 140, 240, 1);
+    box-shadow: 0 0 16px rgba(66, 140, 240, 1);
+}
+
 /*make sure the viewport is 100% height*/
 html, body {
     height : 100%;
