@@ -5,9 +5,12 @@
 html, 
 body, 
 #panel_principal, 
-.panel_control_rangers,
-.panel_control_rangers #div_mapa{
+.panel_control_rangers{
     height:100%;
+}
+
+.panel_control_rangers #div_mapa{
+    height:98%;
 }
 
 .panel_control_rangers{
@@ -17,7 +20,7 @@ body,
 .panel_control_rangers #botonera_ranger{
     position:absolute;
     bottom:5px;
-    left:5px;
+    right:5px;
 }
 
 .boton_redondo_flotante{
