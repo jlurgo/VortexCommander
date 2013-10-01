@@ -5,9 +5,39 @@
 html, 
 body, 
 #panel_principal, 
-.panel_control_rangers,
-.panel_control_rangers #div_mapa{
+.panel_control_rangers{
     height:100%;
+}
+
+.panel_control_rangers #botonera_ranger{
+    position:absolute;
+    bottom:5px;
+    right:5px;
+}
+
+.boton_redondo_flotante{
+    display:inline-block;
+    border-radius:35px;
+    height:70px;
+}
+
+.boton_redondo_flotante:hover{
+    -webkit-box-shadow: 0 0 16px rgba(66, 140, 240, 1);
+    box-shadow: 0 0 16px rgba(66, 140, 240, 1);
+}
+
+.boton_redondo_flotante .imagen_boton{
+    height:70px;
+}
+
+.boton_redondo_flotante_prendido{
+    -webkit-box-shadow: 0 0 16px rgba(255, 0, 0, 1);
+    box-shadow: 0 0 16px rgba(255, 0, 0, 1);
+}
+
+.boton_redondo_flotante_apagado{
+    -webkit-box-shadow: 0 0 16px rgba(0, 0, 0, 1);
+    box-shadow: 0 0 16px rgba(0, 0, 0, 1);
 }
 
 /*make sure the viewport is 100% height*/

@@ -12,7 +12,8 @@ VistaRangerEnMapa.prototype.start = function(){
         map: this.o.mapa,
         title:this.o.nombre,
         position: this.o.posicionInicial,
-        animation: google.maps.Animation.DROP
+        animation: google.maps.Animation.DROP,
+        icon:"vortex_icon.png"
     });
     
     this.derrotero = [];
@@ -57,13 +58,16 @@ VistaRangerEnMapa.prototype.start = function(){
                                 function(mensaje){_this.eventoGoingToRecibido(mensaje);});
     
     this.ajustarFlechaDestino = this.ajustarFlechaDestinoCuandoNoHayDestino;
+    this.panear_al_recibir_posicion = false;
+    this.dejar_rastro = false;
 };
 
 VistaRangerEnMapa.prototype.posicionRecibida = function(posicion){
     this.posicionActual = new google.maps.LatLng(posicion.latitud,posicion.longitud);
+    if(this.panear_al_recibir_posicion) this.o.mapa.panTo(this.posicionActual);
     this.marcador_posicion.setPosition(this.posicionActual);    
     this.derrotero.push(this.posicionActual);
-    this.linea_derrotero.setPath(this.derrotero);
+    if(this.dejar_rastro)this.linea_derrotero.setPath(this.derrotero);
     this.ajustarFlechaDestino();
 };
 
@@ -124,4 +128,28 @@ VistaRangerEnMapa.prototype.seleccionar = function(){
 
 VistaRangerEnMapa.prototype.desSeleccionar = function(){
     this.marcador_posicion.setAnimation(null);
+};
+
+VistaRangerEnMapa.prototype.seguirConPaneo = function(){
+    this.panear_al_recibir_posicion = true;
+};
+
+VistaRangerEnMapa.prototype.yaNoSeguirConPaneo = function(){
+    this.panear_al_recibir_posicion = false;
+};
+
+VistaRangerEnMapa.prototype.dejarRastro = function(){
+    this.dejar_rastro = true;
+    this.linea_derrotero.setVisible(true);
+};
+
+VistaRangerEnMapa.prototype.yaNoDejarRastro = function(){
+    this.dejar_rastro = false;
+    this.linea_derrotero.setVisible(false);
+};
+
+
+var vista_ranger_null = {
+    goTo: function(){},
+    seguirConPaneo: function(){}
 };
