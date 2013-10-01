@@ -40,6 +40,20 @@ PanelControlRangers.prototype.start = function(){
     this.rangerSeleccionado = {
         goTo: function(){}  
     };
+    
+    paper.setup(this.ui.find("#layer_commander")[0]);
+    paper.view.draw();
+    
+    paper.view.onFrame = function (event) {
+        if(this.vistaPeriferica) this.vistaPeriferica.remove();
+        this.vistaPeriferica = new paper.Path.Rectangle({
+            point: [0,0],
+            size: paper.project.view.size,
+            strokeColor: 'gray',
+            strokeWidth: 40,
+            opacity: 0.5
+        });
+    };
 };
 
 PanelControlRangers.prototype.posicionRecibida = function(posicion){
