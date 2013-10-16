@@ -78,11 +78,12 @@ RangerBot.prototype.apuntarAlDestino = function(){
 RangerBot.prototype.calcularProximaPosicion = function(){
     this.apuntarAlDestino();
     if(this.llegoAlDestino()) {
+        this.posicion = this.destino;
+        this.enviarPosicion();
         this.portal.enviarMensaje({
             tipoDeMensaje: "vortex.commander.confirmaciondearribo",
             ranger: this.nombre
         });
-        this.posicion = this.destino;
         this.calcularDestinoRandom(); 
         this.portal.enviarMensaje({
             tipoDeMensaje: "vortex.commander.goingTo",
