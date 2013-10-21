@@ -7,14 +7,14 @@ VistaRangerEnMapa.prototype.start = function(){
     var _this = this;
     this.portal = new NodoPortalBidi();
     NodoRouter.instancia.conectarBidireccionalmenteCon(this.portal);
-    
-    this.marcador_posicion = new google.maps.Marker({
-        map: this.o.mapa,
-        title:this.o.nombre,
-        position: this.o.posicionInicial,
-        animation: google.maps.Animation.DROP,
-        icon:"vortex_icon.png"
-    });
+    this.posicionActual = this.o.posicionInicial;
+//    this.marcador_posicion = new google.maps.Marker({
+//        map: this.o.mapa,
+//        title:this.o.nombre,
+//        position: this.o.posicionInicial,
+//        animation: google.maps.Animation.DROP,
+//        icon:"vortex_icon.png"
+//    });
     
     this.derrotero = [];
     this.linea_derrotero = new google.maps.Polyline({
@@ -25,25 +25,25 @@ VistaRangerEnMapa.prototype.start = function(){
         map: this.o.mapa
     });
     
-    this.label_nombre = new google.maps.InfoWindow({
-        content: $("#plantilla_label_ranger").clone().text(this.o.nombre)[0]
-    });
-    
-    var mouse_down = false;
-    google.maps.event.addListener(this.marcador_posicion, 'mousedown', function(event) {
-        mouse_down = true;
-    });
-    
-    google.maps.event.addListener(this.marcador_posicion, 'mouseup', function(event) {
-        if(mouse_down) _this.o.onClick(_this, event);  
-         mouse_down = false;
-    });
-    
-    this.label_nombre.open(this.o.mapa,this.marcador_posicion);
-    
-    setTimeout(function(){
-        _this.label_nombre.close();
-    },1000);
+//    this.label_nombre = new google.maps.InfoWindow({
+//        content: $("#plantilla_label_ranger").clone().text(this.o.nombre)[0]
+//    });
+//    
+//    var mouse_down = false;
+//    google.maps.event.addListener(this.marcador_posicion, 'mousedown', function(event) {
+//        mouse_down = true;
+//    });
+//    
+//    google.maps.event.addListener(this.marcador_posicion, 'mouseup', function(event) {
+//        if(mouse_down) _this.o.onClick(_this, event);  
+//         mouse_down = false;
+//    });
+//    
+//    this.label_nombre.open(this.o.mapa,this.marcador_posicion);
+//    
+//    setTimeout(function(){
+//        _this.label_nombre.close();
+//    },1000);
     
     this.portal.pedirMensajes(  new FiltroAND([new FiltroXClaveValor("tipoDeMensaje", "vortex.commander.posicion"),
                                                new FiltroXClaveValor("ranger", this.o.nombre)]),
@@ -63,31 +63,30 @@ VistaRangerEnMapa.prototype.start = function(){
     google.maps.event.addListener(this.o.mapa, 
                                   'bounds_changed', 
                                   function(){
-                                        _this.actualizarMarcadorPeriferico();
+                                        _this.actualizarMarcadorPosicion();
                                   });
-    google.maps.event.addListener(this.o.mapa, 
-                                  'click', 
-                                  function(evt){
-                                        _this.alClickearMapaEn(evt.latLng);
-                                  });
-};
-
-VistaRangerEnMapa.prototype.alClickearMapaEn = function(pos){
-    if(this.marcador_periferico){
-        var xy_click = this.getXYFromLatLng(pos);
-        if(this.marcador_periferico.contains(new paper.Point(xy_click.x, xy_click.y))){
-            this.o.mapa.panTo(this.posicionActual);
-        }
+    this.marcador_posicion = new paper.Path.Circle(new paper.Point(30, 30), 10);
+    this.marcador_posicion.fillColor = 'red';
+    this.marcador_posicion.onClick = function(){
+        _this.o.mapa.panTo(_this.posicionActual);
+        _this.o.onClick(_this);
+    };
+    this.marcador_posicion.onMouseEnter = function(event) {
+        _this.marcador_posicion.fillColor = 'blue';
     }
+    
+    this.marcador_posicion.onMouseLeave = function(event) {
+        _this.marcador_posicion.fillColor = 'red';
+    }
+    this.actualizarMarcadorPosicion();
 };
 
 VistaRangerEnMapa.prototype.posicionRecibida = function(posicion){
     this.posicionActual = new google.maps.LatLng(posicion.latitud,posicion.longitud);
     if(this.panear_al_recibir_posicion) this.o.mapa.panTo(this.posicionActual);
-    this.marcador_posicion.setPosition(this.posicionActual);    
     this.derrotero.push(this.posicionActual);
     if(this.dejar_rastro)this.linea_derrotero.setPath(this.derrotero);
-    this.actualizarMarcadorPeriferico();
+    this.actualizarMarcadorPosicion();
 };
 
 VistaRangerEnMapa.prototype.getXYFromLatLng = function(pos){
@@ -99,9 +98,7 @@ VistaRangerEnMapa.prototype.getXYFromLatLng = function(pos){
     return proj.fromLatLngToContainerPixel(pos);
 }
 
-VistaRangerEnMapa.prototype.actualizarMarcadorPeriferico = function(){
-    if(this.marcador_periferico) this.marcador_periferico.remove();
-    
+VistaRangerEnMapa.prototype.actualizarMarcadorPosicion = function(){
     var posRanger = this.getXYFromLatLng(this.posicionActual);
     var rect = new paper.Path.Rectangle({
         point: [10,10],
@@ -119,8 +116,9 @@ VistaRangerEnMapa.prototype.actualizarMarcadorPeriferico = function(){
     var intersecciones = rect.getIntersections(recta_corte);
     if(intersecciones.length>0){    
         var int = intersecciones[0].point;
-        this.marcador_periferico = new paper.Path.Circle(new paper.Point(int.x, int.y), 10);
-        this.marcador_periferico.fillColor = 'red';  
+        this.marcador_posicion.position = new paper.Point(int.x, int.y);
+    }else{
+        this.marcador_posicion.position = new paper.Point(posRanger.x, posRanger.y);
     }
     rect.remove();
     recta_corte.remove();        
@@ -172,9 +170,9 @@ VistaRangerEnMapa.prototype.goTo = function(destino){
 
 VistaRangerEnMapa.prototype.ajustarFlechaDestinoCuandoHayDestino = function(){
     this.flechaDestino.setPath([
-            this.posicionActual,
-            this.destino
-        ]);
+        this.posicionActual,
+        this.destino
+    ]);
 };
 
 VistaRangerEnMapa.prototype.ajustarFlechaDestinoCuandoNoHayDestino = function(){
@@ -182,11 +180,13 @@ VistaRangerEnMapa.prototype.ajustarFlechaDestinoCuandoNoHayDestino = function(){
 };
 
 VistaRangerEnMapa.prototype.seleccionar = function(){
-    this.marcador_posicion.setAnimation(google.maps.Animation.BOUNCE);
+    this.marcador_posicion.strokeColor = 'black';
+    this.marcador_posicion.strokeWidth = 2;
 };
 
 VistaRangerEnMapa.prototype.desSeleccionar = function(){
-    this.marcador_posicion.setAnimation(null);
+    this.marcador_posicion.strokeColor = 'red';
+    this.marcador_posicion.strokeWidth = 0;
 };
 
 VistaRangerEnMapa.prototype.seguirConPaneo = function(){
