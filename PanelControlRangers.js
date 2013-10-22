@@ -10,7 +10,14 @@ PanelControlRangers.prototype.start = function(){
     var mapOptions = {
         zoom: 18,
         center: pos_obelisco, 
-        mapTypeId: google.maps.MapTypeId.ROADMAP
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        disableDefaultUI: true,
+        styles: [{
+            featureType: "poi",
+            stylers: [
+                { visibility: "off" }
+            ]   
+        }]
     };
     this.mapa = new google.maps.Map(this.ui.find("#div_mapa")[0], mapOptions);
     var _this = this;
@@ -29,19 +36,19 @@ PanelControlRangers.prototype.start = function(){
         }
     });
 
-    this.alClickearEnMapa = function(evento){
+    this.alClickearEnMapa = function(posicion){
     };
     this.btn_go_to = new BotonRedondoFlotante({ 
         ui: this.botonera_ranger.find("#btn_go_to"),
         alPrender: function(){
             _this.mapa.setOptions({draggableCursor:'crosshair'});
-            _this.alClickearEnMapa = function(evento){
-                _this.rangerSeleccionado.goTo(evento.latLng); 
+            _this.alClickearEnMapa = function(posicion){
+                _this.rangerSeleccionado.goTo(posicion); 
             }
         },          
         alApagar: function(){
             _this.mapa.setOptions({draggableCursor:null});
-            _this.alClickearEnMapa = function(evento){
+            _this.alClickearEnMapa = function(posicion){
             };
         }
     });
@@ -64,16 +71,6 @@ PanelControlRangers.prototype.start = function(){
     this.portal.pedirMensajes(  new FiltroXClaveValor("tipoDeMensaje", "vortex.commander.posicion"),
                                 function(mensaje){_this.posicionRecibida(mensaje);});
     var _this = this;
-
-    var mouse_down = false;
-    google.maps.event.addListener(this.mapa, 'mousedown', function(evento) {
-        mouse_down = true;
-    });
-    
-    google.maps.event.addListener(this.mapa, 'mouseup', function(evento) {
-        if(mouse_down) _this.alClickearEnMapa(evento);
-         mouse_down = false;
-    });
     
     this.rangerSeleccionado = vista_ranger_null;
     
@@ -83,12 +80,19 @@ PanelControlRangers.prototype.start = function(){
         size: paper.project.view.size,
         strokeColor: 'gray',
         strokeWidth: 40,
-        opacity: 0.5
+        opacity: 0.2
     });
-    
     var tool = new paper.Tool();
 
-    // Define a mousedown and mousedrag handler
+    tool.onMouseDown = function(event) {
+        var overlay = new google.maps.OverlayView();
+        overlay.draw = function() {};
+        overlay.setMap(_this.mapa);        
+        var proj = overlay.getProjection();
+        var latLngClickeada = proj.fromContainerPixelToLatLng(new google.maps.Point(event.point.x, event.point.y));
+        _this.alClickearEnMapa(latLngClickeada);    
+    };
+    
     tool.onMouseDrag = function(event) {
         var overlay = new google.maps.OverlayView();
         overlay.draw = function() {};
@@ -101,7 +105,7 @@ PanelControlRangers.prototype.start = function(){
             _this.rangers[key_ranger].actualizarMarcadorPosicion();
         }
         _this.mapa.panTo(latLngNuevoCentro);
-    }
+    };
         
     this.ui.find("#layer_commander").mousewheel(function(event, delta, deltaX, deltaY) {
         _this.mapa.setZoom(_this.mapa.getZoom() + delta);
@@ -109,6 +113,13 @@ PanelControlRangers.prototype.start = function(){
             _this.rangers[key_ranger].actualizarMarcadorPosicion();
         }
     });
+    
+    paper.project.view.onResize = function(event) {
+        _this.vistaPeriferica.segments[0].point = new paper.Point(0, paper.project.view.size.height);
+        _this.vistaPeriferica.segments[1].point = new paper.Point(0, 0);
+        _this.vistaPeriferica.segments[2].point = new paper.Point(paper.project.view.size.width, 0);
+        _this.vistaPeriferica.segments[3].point = new paper.Point(paper.project.view.size.width, paper.project.view.size.height);
+    };
     
     paper.view.onFrame = function (event) {
         paper.view.draw(); 

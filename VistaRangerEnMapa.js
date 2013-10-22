@@ -8,43 +8,7 @@ VistaRangerEnMapa.prototype.start = function(){
     this.portal = new NodoPortalBidi();
     NodoRouter.instancia.conectarBidireccionalmenteCon(this.portal);
     this.posicionActual = this.o.posicionInicial;
-//    this.marcador_posicion = new google.maps.Marker({
-//        map: this.o.mapa,
-//        title:this.o.nombre,
-//        position: this.o.posicionInicial,
-//        animation: google.maps.Animation.DROP,
-//        icon:"vortex_icon.png"
-//    });
-    
     this.derrotero = [];
-    this.linea_derrotero = new google.maps.Polyline({
-        path: this.derrotero,
-        strokeColor: "#CC55AA",
-        strokeOpacity: 1.0,
-        strokeWeight: 2,
-        map: this.o.mapa
-    });
-    
-//    this.label_nombre = new google.maps.InfoWindow({
-//        content: $("#plantilla_label_ranger").clone().text(this.o.nombre)[0]
-//    });
-//    
-//    var mouse_down = false;
-//    google.maps.event.addListener(this.marcador_posicion, 'mousedown', function(event) {
-//        mouse_down = true;
-//    });
-//    
-//    google.maps.event.addListener(this.marcador_posicion, 'mouseup', function(event) {
-//        if(mouse_down) _this.o.onClick(_this, event);  
-//         mouse_down = false;
-//    });
-//    
-//    this.label_nombre.open(this.o.mapa,this.marcador_posicion);
-//    
-//    setTimeout(function(){
-//        _this.label_nombre.close();
-//    },1000);
-    
     this.portal.pedirMensajes(  new FiltroAND([new FiltroXClaveValor("tipoDeMensaje", "vortex.commander.posicion"),
                                                new FiltroXClaveValor("ranger", this.o.nombre)]),
                                 function(mensaje){_this.posicionRecibida(mensaje);});
@@ -64,8 +28,9 @@ VistaRangerEnMapa.prototype.start = function(){
                                   'bounds_changed', 
                                   function(){
                                         _this.actualizarMarcadorPosicion();
+                                        if(_this.dejar_rastro)_this.dibujarDerrotero();
                                   });
-    this.marcador_posicion = new paper.Path.Circle(new paper.Point(30, 30), 10);
+    this.marcador_posicion = new paper.Path.Circle(new paper.Point(-30, -30), 10);
     this.marcador_posicion.fillColor = 'red';
     this.marcador_posicion.onClick = function(){
         _this.o.mapa.panTo(_this.posicionActual);
@@ -85,7 +50,7 @@ VistaRangerEnMapa.prototype.posicionRecibida = function(posicion){
     this.posicionActual = new google.maps.LatLng(posicion.latitud,posicion.longitud);
     if(this.panear_al_recibir_posicion) this.o.mapa.panTo(this.posicionActual);
     this.derrotero.push(this.posicionActual);
-    if(this.dejar_rastro)this.linea_derrotero.setPath(this.derrotero);
+    if(this.dejar_rastro)this.dibujarDerrotero();
     this.actualizarMarcadorPosicion();
 };
 
@@ -199,14 +164,28 @@ VistaRangerEnMapa.prototype.yaNoSeguirConPaneo = function(){
 
 VistaRangerEnMapa.prototype.dejarRastro = function(){
     this.dejar_rastro = true;
-    this.linea_derrotero.setVisible(true);
+    this.dibujarDerrotero();
 };
 
 VistaRangerEnMapa.prototype.yaNoDejarRastro = function(){
     this.dejar_rastro = false;
-    this.linea_derrotero.setVisible(false);
+    this.linea_derrotero.remove();
 };
 
+VistaRangerEnMapa.prototype.dibujarDerrotero = function(){
+    if(this.linea_derrotero) this.linea_derrotero.remove();
+    this.linea_derrotero = new paper.Path();
+    this.linea_derrotero.strokeWidth = 10;
+    this.linea_derrotero.strokeColor = 'orange';
+    this.linea_derrotero.opacity = 0.7;
+    this.linea_derrotero.strokeJoin = 'round';
+    this.linea_derrotero.strokeCap = 'round';
+    
+    for(var i=0; i<this.derrotero.length; i++){
+        var punto = this.getXYFromLatLng(this.derrotero[i]);
+        this.linea_derrotero.add(new paper.Point(punto.x, punto.y));
+    }
+};
 
 var vista_ranger_null = {
     goTo: function(){},
