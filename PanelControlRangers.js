@@ -20,6 +20,17 @@ PanelControlRangers.prototype.start = function(){
         }]
     };
     this.mapa = new google.maps.Map(this.ui.find("#div_mapa")[0], mapOptions);
+    
+    this.mapa.getPointFromLatLng = function(pos){
+        var overlay = new google.maps.OverlayView();
+        overlay.draw = function() {};
+        overlay.setMap(_this.mapa);
+        
+        var proj = overlay.getProjection();
+        var punto = proj.fromLatLngToContainerPixel(pos);
+        return new paper.Point(punto.x, punto.y);
+    }
+    
     var _this = this;
     this.ui.find("#div_mapa").show(function(){
         google.maps.event.trigger(_this.mapa, "resize");        
