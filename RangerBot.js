@@ -11,7 +11,7 @@ RangerBot.prototype.start = function(){
     
     this.rumbo = Math.random()*360 - 180;
     
-    this.periodoActualizacionPosicion = 1; //segundos
+    this.periodoActualizacionPosicion = 5; //segundos
     this.velocidad = 50; //metros/segundo
     
     this.nombre = "BOT_" + Math.floor((Math.random()*1000)+1).toString();

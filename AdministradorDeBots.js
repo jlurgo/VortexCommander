@@ -2,8 +2,11 @@ var AdministradorDeBots = function(){
     this.start();
 };
 AdministradorDeBots.prototype.start = function(){
-    var clienteHTTP = new NodoClienteHTTP('http://router-vortex.herokuapp.com', 100);             
-    NodoRouter.instancia.conectarBidireccionalmenteCon(clienteHTTP);
+    //var clienteHTTP = new NodoClienteHTTP('http://router-vortex.herokuapp.com', 100);             
+    
+    var socket = io.connect('https://router-vortex.herokuapp.com');
+    var adaptador = new NodoConectorSocket(socket);    
+    NodoRouter.instancia.conectarBidireccionalmenteCon(adaptador);
     
     this.btn_crear_bots = $("#btn_crear_bot");
     this.bots = [];

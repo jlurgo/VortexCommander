@@ -18,7 +18,6 @@ VistaRangerEnMapa.prototype.start = function(){
                                   'bounds_changed', 
                                   function(){
                                         _this.actualizarMarcadorPosicion();
-                                        if(_this.dejar_rastro)_this.dibujarDerrotero();
                                   });
     this.marcador_posicion = new paper.Path.Circle(new paper.Point(-30, -30), 10);
     this.marcador_posicion.fillColor = 'red';
