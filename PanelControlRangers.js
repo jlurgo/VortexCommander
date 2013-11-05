@@ -21,15 +21,21 @@ PanelControlRangers.prototype.start = function(){
     };
     this.mapa = new google.maps.Map(this.ui.find("#div_mapa")[0], mapOptions);
     
+    this.mapa.overlay = new google.maps.OverlayView();
+    this.mapa.overlay.draw = function() {};
+    this.mapa.overlay.setMap(_this.mapa);
+    this.mapa.projection = this.mapa.overlay.getProjection();
+    
+    google.maps.event.addListener(this.mapa, 
+                                  'bounds_changed', 
+                                  function(){
+                                        _this.mapa.projection = _this.mapa.overlay.getProjection();
+                                  });
+    
     this.mapa.getPointFromLatLng = function(pos){
-        var overlay = new google.maps.OverlayView();
-        overlay.draw = function() {};
-        overlay.setMap(_this.mapa);
-        
-        var proj = overlay.getProjection();
-        var punto = proj.fromLatLngToContainerPixel(pos);
+        var punto = _this.mapa.projection.fromLatLngToContainerPixel(pos);
         return new paper.Point(punto.x, punto.y);
-    }
+    };
     
     var _this = this;
     this.ui.find("#div_mapa").show(function(){
@@ -95,23 +101,17 @@ PanelControlRangers.prototype.start = function(){
     });
     var tool = new paper.Tool();
 
-    tool.onMouseDown = function(event) {
-        var overlay = new google.maps.OverlayView();
-        overlay.draw = function() {};
-        overlay.setMap(_this.mapa);        
-        var proj = overlay.getProjection();
-        var latLngClickeada = proj.fromContainerPixelToLatLng(new google.maps.Point(event.point.x, event.point.y));
+    tool.onMouseDown = function(event) {        
+        //var proj = _this.mapa.overlay.getProjection();
+        var latLngClickeada = _this.mapa.projection.fromContainerPixelToLatLng(new google.maps.Point(event.point.x, event.point.y));
         _this.alClickearEnMapa(latLngClickeada);    
     };
     
-    tool.onMouseDrag = function(event) {
-        var overlay = new google.maps.OverlayView();
-        overlay.draw = function() {};
-        overlay.setMap(_this.mapa);        
-        var proj = overlay.getProjection();
+    tool.onMouseDrag = function(event) {       
+        //var proj = _this.mapa.overlay.getProjection();
         var centroDesplazadoPaper = paper.project.view.center.add(event.delta.multiply(-1));
         
-        var latLngNuevoCentro = proj.fromContainerPixelToLatLng(new google.maps.Point(centroDesplazadoPaper.x, centroDesplazadoPaper.y));
+        var latLngNuevoCentro = _this.mapa.projection.fromContainerPixelToLatLng(new google.maps.Point(centroDesplazadoPaper.x, centroDesplazadoPaper.y));
         for(var key_ranger in _this.rangers){
             _this.rangers[key_ranger].actualizarMarcadorPosicion();
         }
