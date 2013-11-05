@@ -137,18 +137,19 @@ PanelControlRangers.prototype.start = function(){
     };
 };
 
-PanelControlRangers.prototype.posicionRecibida = function(posicion){
+PanelControlRangers.prototype.posicionRecibida = function (posicion) {
+    if (this.rangers[posicion.ranger] !== undefined) return;
+    this.rangers[posicion.ranger] = {};
+    var lat_long_posicion = new google.maps.LatLng(posicion.latitud, posicion.longitud);
     var _this = this;
-    var lat_long_posicion = new google.maps.LatLng(posicion.latitud,posicion.longitud);
-    if(this.rangers[posicion.ranger] !== undefined) return;
     this.rangers[posicion.ranger] = new VistaRangerEnMapa({
         mapa: this.mapa,
         nombre: posicion.ranger,
         posicionInicial: lat_long_posicion,
-        onClick: function(ranger, e){
-            _this.seleccionarRanger(ranger); 
-            _this.mostrarBotoneraRanger();   
-            if(_this.btn_seguir_ranger.prendido) _this.seguirRanger(ranger);
+        onClick: function (ranger, e) {
+            _this.seleccionarRanger(ranger);
+            _this.mostrarBotoneraRanger();
+            if (_this.btn_seguir_ranger.prendido) _this.seguirRanger(ranger);
         }
     });
 };
