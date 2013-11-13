@@ -32,8 +32,6 @@ VistaRangerEnMapa.prototype.start = function(){
     this.marcador_posicion.onMouseLeave = function(event) {
         _this.marcador_posicion.fillColor = 'red';
     }
-    this.actualizarMarcadorPosicion();
-    
     this.vista_destino = new VistaDestinoRaider({
         nombreRaider: this.o.nombre,
         mapa: this.o.mapa    
@@ -45,10 +43,12 @@ VistaRangerEnMapa.prototype.start = function(){
     });
 
     this.txt_nombre_raider = new paper.PointText(50, 50);
-    this.txt_nombre_raider.fillColor = 'orange';
+    this.txt_nombre_raider.fillColor = 'black';
     this.txt_nombre_raider.content = this.o.nombre;
-    this.txt_nombre_raider.justification = 'center';
-    this.txt_nombre_raider.visible = false;
+    this.txt_nombre_raider.visible = true;
+    
+    this.actualizarMarcadorPosicion();
+    
 };
 
 VistaRangerEnMapa.prototype.posicionRecibida = function(posicion){
@@ -76,14 +76,31 @@ VistaRangerEnMapa.prototype.actualizarMarcadorPosicion = function(){
     if(intersecciones.length>0){    
         var int = intersecciones[0].point;
         this.marcador_posicion.position = new paper.Point(int.x, int.y);
+        
+        if(this.marcador_posicion.position.x == paper.project.view.size.width - 10){ //contra el borde derecho
+            this.txt_nombre_raider.justification = 'right';
+            this.txt_nombre_raider.point = this.marcador_posicion.position.add([-12,5]);
+        }
+        if(this.marcador_posicion.position.x == 10){ //contra el borde izquierdo
+            this.txt_nombre_raider.justification = 'left';
+            this.txt_nombre_raider.point = this.marcador_posicion.position.add([12,5]);
+        }        
+        if(this.marcador_posicion.position.y == paper.project.view.size.height - 10){ //contra el borde inferior
+            this.txt_nombre_raider.justification = 'center';
+            this.txt_nombre_raider.point = this.marcador_posicion.position.add([0,-13]);
+        }
+        if(this.marcador_posicion.position.y == 10){ //contra el borde superior
+            this.txt_nombre_raider.justification = 'center';
+            this.txt_nombre_raider.point = this.marcador_posicion.position.add([0,23]);
+        }
+        
     }else{
         this.marcador_posicion.position = posRanger;
+        this.txt_nombre_raider.justification = 'center';
+        this.txt_nombre_raider.point = this.marcador_posicion.position.add([0,23]); 
     }
     rect.remove();
-    recta_corte.remove();
-
-    this.txt_nombre_raider.point = this.marcador_posicion.position;
-    this.txt_nombre_raider.visible = true;    
+    recta_corte.remove();     
 };
     
 VistaRangerEnMapa.prototype.visibleEnElMapa = function(){
