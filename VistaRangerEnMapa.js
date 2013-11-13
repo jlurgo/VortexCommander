@@ -41,8 +41,14 @@ VistaRangerEnMapa.prototype.start = function(){
     
     this.vista_derrotero = new VistaDerroteroRaider({
         nombreRaider: this.o.nombre,
-        mapa: this.o.mapa    
+        mapa: this.o.mapa
     });
+
+    this.txt_nombre_raider = new paper.PointText(50, 50);
+    this.txt_nombre_raider.fillColor = 'orange';
+    this.txt_nombre_raider.content = this.o.nombre;
+    this.txt_nombre_raider.justification = 'center';
+    this.txt_nombre_raider.visible = false;
 };
 
 VistaRangerEnMapa.prototype.posicionRecibida = function(posicion){
@@ -74,7 +80,10 @@ VistaRangerEnMapa.prototype.actualizarMarcadorPosicion = function(){
         this.marcador_posicion.position = posRanger;
     }
     rect.remove();
-    recta_corte.remove();        
+    recta_corte.remove();
+
+    this.txt_nombre_raider.point = this.marcador_posicion.position;
+    this.txt_nombre_raider.visible = true;    
 };
     
 VistaRangerEnMapa.prototype.visibleEnElMapa = function(){
