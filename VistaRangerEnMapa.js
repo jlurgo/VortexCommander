@@ -34,7 +34,8 @@ VistaRangerEnMapa.prototype.start = function(){
     }
     this.vista_destino = new VistaDestinoRaider({
         nombreRaider: this.o.nombre,
-        mapa: this.o.mapa    
+        mapa: this.o.mapa,
+        icono_raider: this.marcador_posicion    
     });
     
     this.vista_derrotero = new VistaDerroteroRaider({
