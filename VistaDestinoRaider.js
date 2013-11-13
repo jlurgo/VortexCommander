@@ -22,7 +22,7 @@ VistaDestinoRaider.prototype.start = function(){
     
     this.ajustarFlecha = this.ajustarFlecha_cuando_no_hay_destino;
     this.cuerpo_flecha = new paper.Path();
-    this.cuerpo_flecha.strokeWidth = 10;
+    this.cuerpo_flecha.strokeWidth = 5;
     this.cuerpo_flecha.opacity = 0.5;    
     this.cuerpo_flecha.strokeColor = 'red';
     
@@ -58,7 +58,7 @@ VistaDestinoRaider.prototype.ajustarFlecha_cuando_hay_destino = function(){
     var xyOrigenFlecha = this.mapa.getPointFromLatLng(this.posicionActualRaider);
     var xyPuntaFlecha = this.mapa.getPointFromLatLng(this.destinoRaider);
 
-    var versor_destino = xyPuntaFlecha.add(xyOrigenFlecha.multiply(-1)).normalize(25);
+    var versor_destino = xyPuntaFlecha.add(xyOrigenFlecha.multiply(-1)).normalize(10);
     this.punta_flecha.segments =[
         xyPuntaFlecha.add(versor_destino.rotate(155)),
         xyPuntaFlecha,

@@ -8,7 +8,7 @@ VistaDerroteroRaider.prototype.start = function(){
     this.derrotero = [];
     
     this.linea_derrotero = new paper.Path();
-    this.linea_derrotero.strokeWidth = 10;
+    this.linea_derrotero.strokeWidth = 5;
     this.linea_derrotero.strokeColor = 'orange';
     this.linea_derrotero.opacity = 0.7;
     this.linea_derrotero.strokeJoin = 'round';
