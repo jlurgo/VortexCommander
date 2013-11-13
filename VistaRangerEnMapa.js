@@ -21,8 +21,7 @@ VistaRangerEnMapa.prototype.start = function(){
                                   });
     this.marcador_posicion = new paper.Path.Circle(new paper.Point(-30, -30), 10);
     this.marcador_posicion.fillColor = 'red';
-    this.marcador_posicion.onClick = function(){
-        _this.o.mapa.panTo(_this.posicionActual);
+    this.marcador_posicion.onClick = function(){        
         _this.o.onClick(_this);
     };
     this.marcador_posicion.onMouseEnter = function(event) {
@@ -104,10 +103,6 @@ VistaRangerEnMapa.prototype.actualizarMarcadorPosicion = function(){
     recta_corte.remove();     
 };
     
-VistaRangerEnMapa.prototype.visibleEnElMapa = function(){
-    return false;
-};
-
 VistaRangerEnMapa.prototype.goTo = function(destino){
     this.portal.enviarMensaje({ tipoDeMensaje: "vortex.commander.goto",
                                 ranger: this.o.nombre,
@@ -126,7 +121,8 @@ VistaRangerEnMapa.prototype.desSeleccionar = function(){
     this.marcador_posicion.strokeWidth = 0;
 };
 
-VistaRangerEnMapa.prototype.seguirConPaneo = function(){
+VistaRangerEnMapa.prototype.seguirConPaneo = function () {
+    this.o.mapa.panTo(this.posicionActual);
     this.panear_al_recibir_posicion = true;
 };
 

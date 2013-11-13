@@ -11,14 +11,14 @@ body,
 
 .panel_control_rangers #botonera_ranger{
     position:absolute;
-    bottom:5px;
-    right:5px;
+    bottom:18px;
+    right:23px;
 }
 
 .boton_redondo_flotante{
     display:inline-block;
-    border-radius:35px;
-    height:70px;
+    border-radius:25px;
+    height:50px;
 }
 
 .boton_redondo_flotante:hover{
@@ -27,7 +27,7 @@ body,
 }
 
 .boton_redondo_flotante .imagen_boton{
-    height:70px;
+    height:50px;
 }
 
 .boton_redondo_flotante_prendido{
