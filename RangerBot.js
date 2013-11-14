@@ -1,4 +1,5 @@
-var RangerBot = function(){
+var RangerBot = function (opt) {
+    $.extend(true, this, opt);
     this.start();
 };
 RangerBot.prototype.start = function(){
@@ -13,8 +14,6 @@ RangerBot.prototype.start = function(){
     
     this.periodoActualizacionPosicion = 2; //segundos
     this.velocidad = 50; //metros/segundo
-    
-    this.nombre = "BOT_" + Math.floor((Math.random()*1000)+1).toString();
     
     this.calcularDestinoRandom();
     this.portal.enviarMensaje({
