@@ -28,6 +28,7 @@ VistaDerroteroRaider.prototype.start = function(){
                               function(){
                                   _this.ajustarDibujo();
                               });
+    this.visible = false;
 };
 
 VistaDerroteroRaider.prototype.posicionRecibida = function(posicion){
@@ -47,11 +48,13 @@ VistaDerroteroRaider.prototype.ajustarDibujo_cuando_esta_invisible = function(){
     
 };
 
-VistaDerroteroRaider.prototype.mostrar = function(){
+VistaDerroteroRaider.prototype.mostrar = function () {
     this.ajustarDibujo = this.ajustarDibujo_cuando_esta_visible;
+    this.visible = true;
 };
 
 VistaDerroteroRaider.prototype.ocultar = function(){
     this.linea_derrotero.segments = [];
     this.ajustarDibujo = this.ajustarDibujo_cuando_esta_invisible;
+    this.visible = false;
 };

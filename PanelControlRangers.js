@@ -102,13 +102,11 @@ PanelControlRangers.prototype.start = function () {
     var tool = new paper.Tool();
 
     tool.onMouseDown = function (event) {
-        //var proj = _this.mapa.overlay.getProjection();
         var latLngClickeada = _this.mapa.projection.fromContainerPixelToLatLng(new google.maps.Point(event.point.x, event.point.y));
         _this.alClickearEnMapa(latLngClickeada);
     };
 
     tool.onMouseDrag = function (event) {
-        //var proj = _this.mapa.overlay.getProjection();
         var centroDesplazadoPaper = paper.project.view.center.add(event.delta.multiply(-1));
 
         var latLngNuevoCentro = _this.mapa.projection.fromContainerPixelToLatLng(new google.maps.Point(centroDesplazadoPaper.x, centroDesplazadoPaper.y));
@@ -116,6 +114,7 @@ PanelControlRangers.prototype.start = function () {
             _this.rangers[key_ranger].actualizarMarcadorPosicion();
         }
         _this.mapa.panTo(latLngNuevoCentro);
+        _this.btn_seguir_ranger.apagar();
     };
 
     this.ui.find("#layer_commander").mousewheel(function (event, delta, deltaX, deltaY) {
@@ -155,7 +154,8 @@ PanelControlRangers.prototype.posicionRecibida = function (posicion) {
         onClick: function (ranger, e) {
             _this.seleccionarRanger(ranger);
             _this.mostrarBotoneraRanger();
-            if (_this.btn_seguir_ranger.prendido) _this.seguirRanger(ranger);
+            if (ranger.dejandoRastro()) _this.btn_dejar_rastro.prender();
+            else _this.btn_dejar_rastro.apagar();
         }
     });
 };

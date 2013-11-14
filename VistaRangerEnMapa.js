@@ -130,12 +130,16 @@ VistaRangerEnMapa.prototype.yaNoSeguirConPaneo = function(){
     this.panear_al_recibir_posicion = false;
 };
 
-VistaRangerEnMapa.prototype.dejarRastro = function(){
+VistaRangerEnMapa.prototype.dejarRastro = function () {
     this.vista_derrotero.mostrar();
 };
 
 VistaRangerEnMapa.prototype.yaNoDejarRastro = function(){
     this.vista_derrotero.ocultar();
+};
+
+VistaRangerEnMapa.prototype.dejandoRastro = function () {
+    return this.vista_derrotero.visible;
 };
 
 var vista_ranger_null = {
