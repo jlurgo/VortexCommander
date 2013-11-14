@@ -50,10 +50,11 @@ VistaDerroteroRaider.prototype.ajustarDibujo_cuando_esta_invisible = function(){
 
 VistaDerroteroRaider.prototype.mostrar = function () {
     this.ajustarDibujo = this.ajustarDibujo_cuando_esta_visible;
+    this.ajustarDibujo();
     this.visible = true;
 };
 
-VistaDerroteroRaider.prototype.ocultar = function(){
+VistaDerroteroRaider.prototype.ocultar = function () {
     this.linea_derrotero.segments = [];
     this.ajustarDibujo = this.ajustarDibujo_cuando_esta_invisible;
     this.visible = false;
