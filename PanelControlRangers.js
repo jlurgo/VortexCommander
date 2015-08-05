@@ -80,13 +80,9 @@ PanelControlRangers.prototype.start = function () {
         }
     });
 
-    this.portal = new NodoPortalBidi();
-    NodoRouter.instancia.conectarBidireccionalmenteCon(this.portal);
-
     this.rangers = {};
 
-    this.portal.pedirMensajes(new FiltroXClaveValor("tipoDeMensaje", "vortex.commander.posicion"),
-                                function (mensaje) { _this.posicionRecibida(mensaje); });
+    Vx.when({tipoDeMensaje: "vortex.commander.posicion"}, function (mensaje) { _this.posicionRecibida(mensaje); });
     var _this = this;
 
     this.rangerSeleccionado = vista_ranger_null;

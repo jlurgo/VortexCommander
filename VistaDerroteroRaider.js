@@ -13,13 +13,10 @@ VistaDerroteroRaider.prototype.start = function(){
     this.linea_derrotero.opacity = 0.7;
     this.linea_derrotero.strokeJoin = 'round';
     this.linea_derrotero.strokeCap = 'round';
-    
-    this.portal = new NodoPortalBidi();
-    NodoRouter.instancia.conectarBidireccionalmenteCon(this.portal);
-    
-    this.portal.pedirMensajes(  new FiltroAND([new FiltroXClaveValor("tipoDeMensaje", "vortex.commander.posicion"),
-                                               new FiltroXClaveValor("ranger", this.nombreRaider)]),
-                                function(mensaje){_this.posicionRecibida(mensaje);});
+
+    Vx.when({tipoDeMensaje: "vortex.commander.posicion",
+             ranger: this.nombreRaider},
+            function(mensaje){_this.posicionRecibida(mensaje);});
     
     this.ajustarDibujo = this.ajustarDibujo_cuando_esta_invisible;
     

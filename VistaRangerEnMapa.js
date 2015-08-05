@@ -5,12 +5,13 @@ var VistaRangerEnMapa = function(opt){
 
 VistaRangerEnMapa.prototype.start = function(){
     var _this = this;
-    this.portal = new NodoPortalBidi();
-    NodoRouter.instancia.conectarBidireccionalmenteCon(this.portal);
     this.posicionActual = this.o.posicionInicial;
-    this.portal.pedirMensajes(  new FiltroAND([new FiltroXClaveValor("tipoDeMensaje", "vortex.commander.posicion"),
-                                               new FiltroXClaveValor("ranger", this.o.nombre)]),
-                                function(mensaje){_this.posicionRecibida(mensaje);});
+    Vx.when({
+                tipoDeMensaje:"vortex.commander.posicion",
+                ranger: this.o.nombre
+            }, 
+            function(mensaje){_this.posicionRecibida(mensaje);}
+    );
     
     this.panear_al_recibir_posicion = false;
     
@@ -100,11 +101,12 @@ VistaRangerEnMapa.prototype.actualizarMarcadorPosicion = function(){
         this.txt_nombre_raider.point = this.marcador_posicion.position.add([0,23]); 
     }
     rect.remove();
-    recta_corte.remove();     
+    recta_corte.remove();    
+    this.marcador_posicion.bringToFront();
 };
     
 VistaRangerEnMapa.prototype.goTo = function(destino){
-    this.portal.enviarMensaje({ tipoDeMensaje: "vortex.commander.goto",
+    Vx.send({ tipoDeMensaje: "vortex.commander.goto",
                                 ranger: this.o.nombre,
                                 latitudDestino: destino.lat(),
                                 longitudDestino: destino.lng() 

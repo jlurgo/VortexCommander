@@ -5,20 +5,17 @@ var VistaDestinoRaider = function(opt){
 
 VistaDestinoRaider.prototype.start = function(){
     var _this = this;
-    this.portal = new NodoPortalBidi();
-    NodoRouter.instancia.conectarBidireccionalmenteCon(this.portal);
+    Vx.when({tipoDeMensaje: "vortex.commander.posicion",
+             ranger: this.nombreRaider},
+            function(mensaje){_this.posicionRecibida(mensaje);});
     
-    this.portal.pedirMensajes(  new FiltroAND([new FiltroXClaveValor("tipoDeMensaje", "vortex.commander.posicion"),
-                                               new FiltroXClaveValor("ranger", this.nombreRaider)]),
-                                function(mensaje){_this.posicionRecibida(mensaje);});
+    Vx.when({tipoDeMensaje: "vortex.commander.confirmaciondearribo",
+             ranger: this.nombreRaider},
+            function(mensaje){_this.confirmacionDeArriboRecibida(mensaje);});
     
-    this.portal.pedirMensajes(  new FiltroAND([new FiltroXClaveValor("tipoDeMensaje", "vortex.commander.confirmaciondearribo"),
-                                               new FiltroXClaveValor("ranger", this.nombreRaider)]),
-                                function(mensaje){_this.confirmacionDeArriboRecibida(mensaje);});
-    
-    this.portal.pedirMensajes(  new FiltroAND([new FiltroXClaveValor("tipoDeMensaje", "vortex.commander.goingTo"),
-                                               new FiltroXClaveValor("ranger", this.nombreRaider)]),
-                                function(mensaje){_this.eventoGoingToRecibido(mensaje);});
+    Vx.when({tipoDeMensaje: "vortex.commander.goingTo",
+            ranger: this.nombreRaider},
+            function(mensaje){_this.eventoGoingToRecibido(mensaje);});
     
     this.ajustarFlecha = this.ajustarFlecha_cuando_no_hay_destino;
     this.cuerpo_flecha = new paper.Path();

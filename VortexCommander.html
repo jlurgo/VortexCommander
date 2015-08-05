@@ -1,4 +1,4 @@
-﻿<!DOCTYPE HTML>
+<!DOCTYPE HTML>
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -15,10 +15,10 @@
         <div id="plantillas">
             <div id="plantilla_panel_control_rangers" class="panel_control_rangers">
                 <div id="div_mapa"></div>
-                <canvas id="layer_commander" resize></canvas>
+                <canvas id="layer_commander" resize="true"></canvas>
                 <div id="botonera_ranger">
                     <div id="btn_seguir_ranger" class="boton_redondo_flotante">
-                        <img id="imagen_btn_seguir_ranger" class="imagen_boton"  src="seguir_icon.png"/>
+                        <img id="imagen_btn_seguir_ranger" class="imagen_boton" src="seguir_icon.png"/>
                     </div>
                     <div id="btn_go_to" class="boton_redondo_flotante">
                         <img id="imagen_btn_go_to" class="imagen_boton" src="go_to_icon.png"/>
@@ -35,31 +35,17 @@
     
     
     <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script> 
-    <script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script type="text/javascript" src="underscore.min.js"></script>
     <script type="text/javascript" src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCTwSyuSvqrNmXA32DrIrHf1VMBx02o0HE&sensor=false"></script>
 <!--    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=geometry&sensor=true"></script>-->
     <script type="text/javascript" src="jquery.mousewheel.js"></script> 
     
-    <script type="text/javascript" src="paperjs-v0.9.9/paper.js"></script>
+    <script type="text/javascript" src="paperjs-v0.9.23/paper-full.js"></script>
     
     <!--Vortex JS-->
-    <script type="text/javascript" src="http://jlurgo.github.io/VortexJS/Vortex.js"></script>
-    <script type="text/javascript" src="http://jlurgo.github.io/VortexJS/FiltrosYTransformaciones.js"></script>
-    <script type="text/javascript" src="http://jlurgo.github.io/VortexJS/NodoClienteHTTP.js"></script> 
-    <script type="text/javascript" src="http://jlurgo.github.io/VortexJS/GeneradorDeIdMensaje.js"></script> 
-    <script type="text/javascript" src="http://jlurgo.github.io/VortexJS/ClonadorDeObjetos.js"></script> 
-    <script type="text/javascript" src="http://jlurgo.github.io/VortexJS/NodoMultiplexor.js"></script> 
-    <script type="text/javascript" src="http://jlurgo.github.io/VortexJS/NodoPortalBidi.js"></script> 
-    <script type="text/javascript" src="http://jlurgo.github.io/VortexJS/NodoPortalBidiMonoFiltro.js"></script> 
-    <script type="text/javascript" src="http://jlurgo.github.io/VortexJS/NodoRouter.js"></script> 
-    <script type="text/javascript" src="http://jlurgo.github.io/VortexJS/PataConectora.js"></script> 
-    <script type="text/javascript" src="http://jlurgo.github.io/VortexJS/Canal.js"></script> 
-    <script type="text/javascript" src="http://jlurgo.github.io/VortexJS/NodoPortalConCanal.js"></script> 
-    <script type="text/javascript" src="http://jlurgo.github.io/VortexJS/NodoPortalBidiMonoFiltroConCanal.js"></script> 
-    <script type="text/javascript" src="http://jlurgo.github.io/VortexJS/ClonadorDeObjetos.js"></script> 
     <script type="text/javascript" src="http://jlurgo.github.io/VortexJS/socket.io.js"></script>
-    <script type="text/javascript" src="http://jlurgo.github.io/VortexJS/NodoConectorSocket.js"></script>
+    <script type="text/javascript" src="http://jlurgo.github.io/VortexJS/vortex.min.js"></script>
     
     <!--Vortex Commander-->
     <script type="text/javascript" src="VortexCommander.js"></script> 

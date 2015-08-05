@@ -4,19 +4,16 @@ var RangerBot = function (opt) {
 };
 RangerBot.prototype.start = function(){
     var _this = this;
-    this.portal =  new NodoPortalBidi();         
-    NodoRouter.instancia.conectarBidireccionalmenteCon(this.portal);
-    
     this.posicion = new google.maps.LatLng(-34.603683 + (Math.random()*0.01)-0.005,
                                            -58.381569 + (Math.random()*0.01)-0.005);
     
     this.rumbo = Math.random()*360 - 180;
     
-    this.periodoActualizacionPosicion = 2; //segundos
-    this.velocidad = 50; //metros/segundo
+    this.periodoActualizacionPosicion = 1; //segundos
+    this.velocidad = 200; //metros/segundo
     
     this.calcularDestinoRandom();
-    this.portal.enviarMensaje({
+    Vx.send({
         tipoDeMensaje: "vortex.commander.goingTo",
         ranger: this.nombre,
         latitud: this.destino.lat(),
@@ -29,14 +26,14 @@ RangerBot.prototype.start = function(){
         }
         , this.periodoActualizacionPosicion * 1000);
     
-    this.portal.pedirMensajes( new FiltroAND([new FiltroXClaveValor("tipoDeMensaje", "vortex.commander.goto"),
-                                               new FiltroXClaveValor("ranger", this.nombre)]),
-                                this.goToRecibido.bind(this));
+    Vx.when( {  tipoDeMensaje: "vortex.commander.goto",
+                ranger: this.nombre },               
+            this.goToRecibido.bind(this));
 };
 
 RangerBot.prototype.goToRecibido = function(mensaje){   
     this.destino = new google.maps.LatLng(mensaje.latitudDestino, mensaje.longitudDestino);
-    this.portal.enviarMensaje({
+    Vx.send({
             tipoDeMensaje: "vortex.commander.goingTo",
             ranger: this.nombre,
             latitud: this.destino.lat(),
@@ -45,7 +42,7 @@ RangerBot.prototype.goToRecibido = function(mensaje){
 };
 
 RangerBot.prototype.enviarPosicion = function(){
-    this.portal.enviarMensaje({
+    Vx.send({
                 tipoDeMensaje: "vortex.commander.posicion",
                 ranger: this.nombre,
                 latitud: this.posicion.lat(),
@@ -79,12 +76,12 @@ RangerBot.prototype.calcularProximaPosicion = function(){
     if(this.llegoAlDestino()) {
         this.posicion = this.destino;
         this.enviarPosicion();
-        this.portal.enviarMensaje({
+        Vx.send({
             tipoDeMensaje: "vortex.commander.confirmaciondearribo",
             ranger: this.nombre
         });
         this.calcularDestinoRandom(); 
-        this.portal.enviarMensaje({
+        Vx.send({
             tipoDeMensaje: "vortex.commander.goingTo",
             ranger: this.nombre,
             latitud: this.destino.lat(),
