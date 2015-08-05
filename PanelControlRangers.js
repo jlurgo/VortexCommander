@@ -8,7 +8,7 @@ PanelControlRangers.prototype.start = function () {
     this.ui = $('#plantilla_panel_control_rangers').clone();
     var pos_obelisco = new google.maps.LatLng(-34.603683, -58.381569);
     var mapOptions = {
-        zoom: 18,
+        zoom: 17,
         center: pos_obelisco,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         disableDefaultUI: true,
@@ -132,6 +132,9 @@ PanelControlRangers.prototype.start = function () {
     };
 
     this.ocultarBotoneraRanger();  
+    setTimeout(function(){
+        _this.mapa.setZoom(18);        
+    }, 1000);
 };
 
 PanelControlRangers.prototype.alClickearEnMapa_Default = function (posicion) {
