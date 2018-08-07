@@ -1,5 +1,5 @@
 $(function () {            
-    Vx.conectarCon(new NodoConectorSocket('https://router-vortex.herokuapp.com'));
+    Vx.conectarCon(new NodoClienteHTTP('http://router-vortex.herokuapp.com'));
     //Vx.conectarCon(new NodoConectorSocket('https://server-vortex.herokuapp.com'));
     
     var panel_control = new PanelControlRangers();        
