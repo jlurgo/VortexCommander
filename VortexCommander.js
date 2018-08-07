@@ -1,6 +1,6 @@
 $(function () {            
-    //Vx.conectarCon(new NodoConectorSocket('https://router-vortex.herokuapp.com'));
-    Vx.conectarCon(new NodoConectorSocket('https://server-vortex.herokuapp.com'));
+    Vx.conectarCon(new NodoConectorSocket('https://router-vortex.herokuapp.com'));
+    //Vx.conectarCon(new NodoConectorSocket('https://server-vortex.herokuapp.com'));
     
     var panel_control = new PanelControlRangers();        
     panel_control.dibujarEn($('#panel_principal'))

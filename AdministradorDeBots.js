@@ -2,8 +2,8 @@ var AdministradorDeBots = function(){
     this.start();
 };
 AdministradorDeBots.prototype.start = function () {
-    //Vx.conectarCon(new NodoConectorSocket('https://router-vortex.herokuapp.com'));
-    Vx.conectarCon(new NodoConectorSocket('https://server-vortex.herokuapp.com'));
+    Vx.conectarCon(new NodoConectorSocket('https://router-vortex.herokuapp.com'));
+    //Vx.conectarCon(new NodoConectorSocket('https://server-vortex.herokuapp.com'));
 
     this.btn_crear_bots = $("#btn_crear_bot");
     this.contador_bots = $("#contador_bots");
