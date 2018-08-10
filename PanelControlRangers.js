@@ -103,13 +103,20 @@ PanelControlRangers.prototype.start = function () {
     };
 
     tool.onMouseDrag = function (event) {
-        var centroDesplazadoPaper = paper.project.view.center.add(event.delta.multiply(-1));
-
+        var centroDesplazadoPaper = paper.project.view.center.add(event.delta.multiply(-1));        
         var latLngNuevoCentro = _this.mapa.projection.fromContainerPixelToLatLng(new google.maps.Point(centroDesplazadoPaper.x, centroDesplazadoPaper.y));
+        _this.mapa.panTo(latLngNuevoCentro);
+        
+        console.log("Valores:");
+        console.log(event.delta);
+        console.log(paper.project.view.center);
+        console.log(centroDesplazadoPaper);
+        console.log(latLngNuevoCentro);
+        
         for (var key_ranger in _this.rangers) {
             _this.rangers[key_ranger].actualizarMarcadorPosicion();
         }
-        _this.mapa.panTo(latLngNuevoCentro);
+        
         _this.btn_seguir_ranger.apagar();
     };
 
